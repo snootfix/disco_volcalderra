@@ -1,6 +1,11 @@
 import "./styles/styles.scss";
+import HtmlService from "./services/HtmlService";
+import GameService from "./services/GameService";
+import RendererService from "./services/RendererService";
 
+//TODO: set up game loop
 (() => {
-    const content = document.querySelector("body > .content");
+    HtmlService.init();
 
+    RendererService.render(GameService.getPlayer());
 })();
