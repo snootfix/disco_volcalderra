@@ -1,5 +1,35 @@
 import HtmlService from "./HtmlService";
 
+type SkillKey =
+    | keyof TSkills["intellect"]
+    | keyof TSkills["motorics"]
+    | keyof TSkills["physique"]
+    | keyof TSkills["psyche"];
+
+const getSkillAssets = (skill: SkillKey) => {
+    const imgBasePath = "img/skills";
+    const assetMap: Partial<{ [key in typeof skill]: { label: string; img: string } }> = {
+        authority: { label: "Authority", img: `${imgBasePath}/authority.PNG` },
+        composure: { label: "Composure", img: `${imgBasePath}/composure.PNG` },
+        conceptualization: { label: "Conceptualization", img: `${imgBasePath}/conceptualization.PNG` },
+        electrochemistry: { label: "Electro-Chemistry", img: `${imgBasePath}/electrochemistry.PNG` },
+        chancyclopedia: { label: "Chan-Cyclopedia", img: `${imgBasePath}/encyclopedia.PNG` },
+        endurance: { label: "Endurance", img: `${imgBasePath}/endurance.PNG` },
+        espirit_de_dinos: { label: "Espirit De Dinos", img: `${imgBasePath}/espirit_de_dinos.PNG` },
+        espirit_de_cavemen: { label: "Espirit De Cavemen", img: `${imgBasePath}/espirit_de_cavemen.PNG` },
+        hand_eye_coordination: { label: "Hand-Eye Coordination", img: `${imgBasePath}/hand_eye_coordination.PNG` },
+        logic: { label: "Logic", img: `${imgBasePath}/logic.PNG` },
+        pain_threshold: { label: "Pain Threshold", img: `${imgBasePath}/pain_threshold.PNG` },
+        perception: { label: "Perception", img: `${imgBasePath}/perception.PNG` },
+        physical_instrument: { label: "Physical Instrument", img: `${imgBasePath}/physical_instrument.PNG` },
+        reaction_speed: { label: "Reaction Speed", img: `${imgBasePath}/reaction_speed.PNG` },
+        visual_calculus: { label: "Visual Calculus", img: `${imgBasePath}/visual_calculus.PNG` },
+        volition: { label: "Volition", img: `${imgBasePath}/volition.PNG` },
+    };
+
+    return assetMap[skill] || null;
+};
+
 class RendererService {
     public render = (player: TPlayer) => {
         this.renderAvatar();
@@ -16,12 +46,16 @@ class RendererService {
     };
 
     private renderSkills = ({ intellect, motorics, physique, psyche }: TSkills) => {
-        const renderSkillBadge = (label: string, value: number) => {
-            //TODO: gfx
+        const renderSkillBadge = (code: SkillKey, valueBase: any) => {
+            const value = valueBase.base + valueBase[code];
+
+            const assets = getSkillAssets(code as any);
+            if (!assets) throw Error(`Missing assets for skill: ${code}`);
 
             const html = `
                     <div class="info">
-                        <div class="label">${label}</div>
+                        <div class="overlay" style="background-image: url('${assets.img}')"></div>
+                        <div class="label">${assets.label}</div>
                         <div class="value">${value}</div>
                     </div>
                 `;
@@ -32,34 +66,34 @@ class RendererService {
         const html = `
                 <div class="row">
                     <div>${intellect.base}</div>
-                    <div>${renderSkillBadge('Logic', intellect.logic + intellect.base)}</div>
-                    <div>${renderSkillBadge('Chan-cyclopedia', intellect.chancyclopedia + intellect.base)}</div>
-                    <div>${renderSkillBadge('Conceptualization', intellect.conceptualization + intellect.base)}</div>
-                    <div>${renderSkillBadge('Visual Calculus', intellect.visual_calculus + intellect.base)}</div>
+                    <div>${renderSkillBadge("logic", intellect)}</div>
+                    <div>${renderSkillBadge("chancyclopedia", intellect)}</div>
+                    <div>${renderSkillBadge("conceptualization", intellect)}</div>
+                    <div>${renderSkillBadge("visual_calculus", intellect)}</div>
                 </div>
 
                 <div class="row">
                     <div>${psyche.base}</div>
-                    <div>${renderSkillBadge('Volition', psyche.volition + psyche.base)}</div>
-                    <div>${renderSkillBadge('Authority', psyche.authority + psyche.base)}</div>
-                    <div>${renderSkillBadge('Espirit De Cavemen', psyche.espirit_de_cavemen + psyche.base)}</div>
-                    <div>${renderSkillBadge('Espirit De Dinos', psyche.espirit_de_dinos + psyche.base)}</div>
+                    <div>${renderSkillBadge("volition", psyche)}</div>
+                    <div>${renderSkillBadge("authority", psyche)}</div>
+                    <div>${renderSkillBadge("espirit_de_cavemen", psyche)}</div>
+                    <div>${renderSkillBadge("espirit_de_dinos", psyche)}</div>
                 </div>
 
                 <div class="row">
                     <div>${physique.base}</div>
-                    <div>${renderSkillBadge('Endurance', physique.endurance + physique.base)}</div>
-                    <div>${renderSkillBadge('Pain Threshold', physique.pain_threshold + physique.base)}</div>
-                    <div>${renderSkillBadge('Physical Instrument', physique.physical_instrument + physique.base)}</div>
-                    <div>${renderSkillBadge('Electro-chemistry', physique.electrochemistry + physique.base)}</div>
+                    <div>${renderSkillBadge("endurance", physique)}</div>
+                    <div>${renderSkillBadge("pain_threshold", physique)}</div>
+                    <div>${renderSkillBadge("physical_instrument", physique)}</div>
+                    <div>${renderSkillBadge("electrochemistry", physique)}</div>
                 </div>
 
                 <div class="row">
                     <div>${motorics.base}</div>
-                    <div>${renderSkillBadge('Hand-Eye Coordination', motorics.hand_eye_coordination + motorics.base)}</div>
-                    <div>${renderSkillBadge('Perception', motorics.perception + motorics.base)}</div>
-                    <div>${renderSkillBadge('Reaction Speed', motorics.reaction_speed + motorics.base)}</div>
-                    <div>${renderSkillBadge('Composure', motorics.composure + motorics.base)}</div>
+                    <div>${renderSkillBadge("hand_eye_coordination", motorics)}</div>
+                    <div>${renderSkillBadge("perception", motorics)}</div>
+                    <div>${renderSkillBadge("reaction_speed", motorics)}</div>
+                    <div>${renderSkillBadge("composure", motorics)}</div>
                 </div>
             `;
 
