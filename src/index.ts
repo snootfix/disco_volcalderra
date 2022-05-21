@@ -1,4 +1,6 @@
+import "./styles/styles.scss";
+
 (() => {
-    const body = document.querySelector("body");
-    if (!body) return;
+    const content = document.querySelector("body > .content");
+
 })();

@@ -1,0 +1,52 @@
+.skills {
+    position: fixed;
+    top: 10vh;
+    left: 25vw;
+    display: none;
+    width: calc(4 * 120px + 20px);
+    grid-template-columns: 1fr;
+    align-content: flex-start;
+
+    .row {
+        display: grid;
+        grid-template-columns: 20px repeat(4, 120px);
+
+        > div {
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            padding: 8px;
+
+            &:first-child {
+                justify-content: center;
+                align-items: center;
+            }
+
+            &:not(:first-child) {
+                height: 104px;
+                width: 104px;
+            }
+
+            .info {
+                align-self: flex-end;
+                text-align: center;
+                text-transform: uppercase;
+
+                .label {
+                    font-size: 12px;
+                    padding: 0 4px;
+                    word-break: break-word;
+                }
+
+                .value {
+                    position: absolute;
+                    bottom: 0;
+                    right: 4px;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

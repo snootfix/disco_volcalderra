@@ -1,0 +1,15 @@
+@import "partials/scene";
+@import "partials/avatar";
+@import "partials/skills";
+
+body {
+  padding: 0;
+  margin: 0;
+
+  > .content {
+    display: grid;
+    grid-template-columns: 3fr minmax(320px, 1fr);
+    height: 100vh;
+    width: calc(100vw - 2px);
+  }
+}
